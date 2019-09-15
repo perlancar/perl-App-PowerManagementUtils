@@ -48,10 +48,8 @@ $SPEC{prevent_sleep_until_interrupted} = {
     description => <<'_',
 
 Uses <pm:Proc::Govern> to run `sleep infinity`, with the option `no-sleep' to
-instruct Proc::Govern to disable system from sleeping until interrupted.
-
-For more options when running command, e.g. timeout, load control, autorestart,
-screensaver control, use the module or its CLI <prog:govproc> directly.
+instruct Proc::Govern to disable system from sleeping. To stop preventing sleep,
+you can press Ctrl-C.
 
 _
     args => {
