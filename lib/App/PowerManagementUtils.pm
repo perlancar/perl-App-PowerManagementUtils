@@ -14,8 +14,10 @@ $SPEC{prevent_sleep_while} = {
     summary => 'Prevent sleep while running a command',
     description => <<'_',
 
-Uses <pm:Proc::Govern>. For more options when running command, e.g. timeout,
-load control, autorestart, use the module or its CLI <prog:govproc> instead.
+Uses <pm:Proc::Govern> to run a command, with the option `no-sleep' to instruct
+Proc::Govern to disable system from sleeping while running the command. For more
+options when running command, e.g. timeout, load control, autorestart,
+screensaver control, use the module or its CLI <prog:govproc> directly.
 
 _
     args => {
@@ -34,6 +36,36 @@ sub prevent_sleep_while {
 
     my $exit = Proc::Govern::govern_process(
         command => $args{command},
+        no_sleep => 1,
+    );
+
+    [200, "Exit code is $exit", "", {"cmdline.exit_code"=>$exit}];
+}
+
+$SPEC{prevent_sleep_until_interrupted} = {
+    v => 1.1,
+    summary => 'Prevent sleep until interrupted',
+    description => <<'_',
+
+Uses <pm:Proc::Govern> to run `sleep infinity`, with the option `no-sleep' to
+instruct Proc::Govern to disable system from sleeping until interrupted.
+
+For more options when running command, e.g. timeout, load control, autorestart,
+screensaver control, use the module or its CLI <prog:govproc> directly.
+
+_
+    args => {
+    },
+};
+sub prevent_sleep_until_interrupted {
+    require Proc::Govern;
+
+    my %args = @_;
+
+    print "Now preventing system from sleeping. ",
+        "Press Ctrl-C to stop.\n";
+    my $exit = Proc::Govern::govern_process(
+        command => ['sleep', 'infinity'],
         no_sleep => 1,
     );
 
